@@ -1,1 +1,2 @@
-Here are the supplementary files to the paper.
+# Wrapper Methods for Multi-Objective Feature Selection
+In machine learning, models cannot be fully described by a single metric; this is why so many metrics capturing the various aspects of the model exist and are used in their evaluation. Given this, we cannot rely on a single metric to select relevant features for building the models. We should consider multiple metrics when measuring the features’ relevance, which motivates multi-objective feature selection.

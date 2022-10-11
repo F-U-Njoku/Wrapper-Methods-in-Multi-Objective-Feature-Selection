@@ -121,7 +121,8 @@ def run_experiment(classifier):
                     'sk_min', 'sk_med', 'sk_avg', 'sk_max',
                     'ml_s', 'sf_s', 'sk_s']
     result_dataframe = pd.DataFrame(columns=column_names)
-    datasets = [793]
+    datasets = [1015, 793, 1021, 819, 1004, 41966, 995, 41158,
+            1464, 931, 40983, 841, 1061, 834, 40666, 41145]
     seeds = [(2 * n) + 1 for n in range(10)]
 
     for data in datasets:

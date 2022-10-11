@@ -88,8 +88,8 @@ def experiment(classifier):
 
     column_names = ['acc_acc', 'acc_auc', 'auc_acc', 'auc_auc', 'sum_acc', 'sum_auc']
     result_dataframe = pd.DataFrame(columns=column_names)
-    datasets = [41158, 1464, 931, 40983, 841, 1061, 834, 40666, 41145]
-    # 1015, 793, 1021, 819, 1004, 41966, 995,
+    datasets = [1015, 793, 1021, 819, 1004, 41966, 995, 41158,
+            1464, 931, 40983, 841, 1061, 834, 40666, 41145]
     for data in datasets:
         print(data)
         result = []
@@ -113,5 +113,4 @@ def experiment(classifier):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     nb = GaussianNB()
-    baseTree = DecisionTreeClassifier(random_state=0)
     experiment(nb)

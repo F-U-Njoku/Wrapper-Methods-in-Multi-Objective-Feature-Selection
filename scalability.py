@@ -141,12 +141,6 @@ def experiment():
             f.writelines([l1, l2, l3, l2, l4, l2])
         start_feat += 200
 
-        # call feature selection method
-        # gini_index.gini_index(X2, y2)
-        # JMI.jmi(X2, y2, n_selected_features=subset_size)
-        # reliefF.reliefF(X.values, y.values)
-        # SPEC.spec(X.values, **kwargs)
-        # y_fs = construct_label_matrix(y)
 
 
 if __name__ == '__main__':

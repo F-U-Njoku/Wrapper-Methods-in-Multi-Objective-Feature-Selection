@@ -12,7 +12,9 @@ It is advisable to create a [Virtual Environment(VE)](https://docs.python.org/3/
 ## Execution
 We have seperated the experiments into four each of which test various aspects of our work. We explain them below as well as show how to run these scripts and the results to expect 
 * Filter methods - predictive performance & stability
+In this work, we considered six filter method - MRMR, JMI, CMIM, Gini, ReliefF, and SPEC. The ```filter.py``` file contains the code for the experiment on filter methods. To execute for each method, we uncomment the line associated with the method between lines 138 and 151 and then set an appropriate name for the output file on line 175. Afterwards, the experiment can be executed through an IDE or on the command line with the command ```python filter.py```.
 * Wrapper methods - predictive performance & stability
+
 * MO-SFS - predictive performance
 * Wrapper methods - scalability
 

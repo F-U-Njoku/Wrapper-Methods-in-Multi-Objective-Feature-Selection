@@ -19,6 +19,16 @@ from sklearn.feature_selection import SequentialFeatureSelector
 from mlxtend.feature_selection import SequentialFeatureSelector as SFS
 from sklearn.model_selection import StratifiedKFold, train_test_split, cross_val_score
 
+size = 0.5
+column_names = ['ml_min', 'ml_med', 'ml_avg', 'ml_max',
+                'sf_min', 'sf_med', 'sf_avg', 'sf_max',
+                'sk_min', 'sk_med', 'sk_avg', 'sk_max',
+                'ml_s', 'sf_s', 'sk_s']
+result_dataframe = pd.DataFrame(columns=column_names)
+datasets = [1015, 793, 1021, 819, 1004, 41966, 995, 41158,
+            1464, 931, 40983, 841, 1061, 834, 40666, 41145]
+seeds = [(2 * n) + 1 for n in range(10)]
+
 
 def fetch_data(number):
     dataset = oml.datasets.get_dataset(number)
@@ -97,8 +107,8 @@ def return_subset(feature_dict, res_list, subset_list, id):
     all_index = list(range(len(feature_dict)))
     selected_idx = [key for key, value in feature_dict.items() if value in res_list]
     subset = [1 if index in selected_idx else 0 for index in all_index]
-    # subset_list[id].append(subset) #uncomment
-    return subset  # remove ubset from return statement
+    subset_list[id].append(subset)
+    return
 
 
 def accuracy_change(clf, X, y, idx, acc_change, id):
@@ -115,16 +125,6 @@ def get_stability(subset_list):
 
 
 def run_experiment(classifier):
-    size = 0.5
-    column_names = ['ml_min', 'ml_med', 'ml_avg', 'ml_max',
-                    'sf_min', 'sf_med', 'sf_avg', 'sf_max',
-                    'sk_min', 'sk_med', 'sk_avg', 'sk_max',
-                    'ml_s', 'sf_s', 'sk_s']
-    result_dataframe = pd.DataFrame(columns=column_names)
-    datasets = [1015, 793, 1021, 819, 1004, 41966, 995, 41158,
-            1464, 931, 40983, 841, 1061, 834, 40666, 41145]
-    seeds = [(2 * n) + 1 for n in range(10)]
-
     for data in datasets:
         print(data)
         result = []
@@ -143,35 +143,35 @@ def run_experiment(classifier):
             idx = list(mlxtend_exp(classifier, subset_size, True, X, y))
             print(idx)
             res_list = list(itemgetter(*idx)(features))
-            return_subset(attribute_dict, res_list, [], 0)
-            # accuracy_change(classifier, X, y, idx, acc_change, 0)
+            return_subset(attribute_dict, res_list, subset_list, 0)
+            accuracy_change(classifier, X, y, idx, acc_change, 0)
 
-            # # SK-FEATURE
-            # idx = list(skfeature_exp(X, y, subset_size, classifier))
-            # res_list = list(itemgetter(*idx)(features))
-            # return_subset(attribute_dict, res_list, subset_list, 1)
-            # accuracy_change(classifier, X, y, idx, acc_change, 1)
-            #
-            # # SK-LEARN
-            # idx = list(sklearn_exp(classifier, subset_size, 'forward', X, y))
-            # res_list = list(itemgetter(*idx)(features))
-            # return_subset(attribute_dict, res_list, subset_list, 2)
-            # accuracy_change(classifier, X, y, idx, acc_change, 2)
+            # SK-FEATURE
+            idx = list(skfeature_exp(X, y, subset_size, classifier))
+            res_list = list(itemgetter(*idx)(features))
+            return_subset(attribute_dict, res_list, subset_list, 1)
+            accuracy_change(classifier, X, y, idx, acc_change, 1)
 
-        # for i in acc_change:
-        #     result.append(min(i))
-        #     result.append(np.median(i))
-        #     result.append(np.average(i))
-        #     result.append(max(i))
-        #
-        # for i in [subset_list]:
-        #     for j in range(3):
-        #         result.append(get_stability(i[j]))
-        # result_dataframe.loc[len(result_dataframe)] = result
-        # result_dataframe.to_csv("results/" + str(classifier), index=False)
+            # SK-LEARN
+            idx = list(sklearn_exp(classifier, subset_size, 'forward', X, y))
+            res_list = list(itemgetter(*idx)(features))
+            return_subset(attribute_dict, res_list, subset_list, 2)
+            accuracy_change(classifier, X, y, idx, acc_change, 2)
+
+        for i in acc_change:
+            result.append(min(i))
+            result.append(np.median(i))
+            result.append(np.average(i))
+            result.append(max(i))
+
+        for i in [subset_list]:
+            for j in range(3):
+                result.append(get_stability(i[j]))
+        result_dataframe.loc[len(result_dataframe)] = result
+        result_dataframe.to_csv(str(classifier), index=False)
 
     print(result_dataframe.head())
-    result_dataframe.to_csv("results/" + str(classifier), index=False)
+    result_dataframe.to_csv(str(classifier), index=False)
 
 
 # Press the green button in the gutter to run the script.
@@ -180,5 +180,5 @@ if __name__ == '__main__':
     knn = KNeighborsClassifier()
     baseTree = DecisionTreeClassifier(random_state=0)
     baseSVM = svm = SVC()
-    # mlp = MLPClassifier(random_state=0, alpha=0.0, solver="sgd")
     run_experiment(baseTree)
+

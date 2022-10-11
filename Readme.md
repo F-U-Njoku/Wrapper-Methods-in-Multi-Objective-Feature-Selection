@@ -21,6 +21,9 @@ The ```wrapper.py``` file is used to measure the predictive performance as well 
 
 
 * MO-SFS - predictive performance
+
+MO-SFS is our proposed multi-objective wrapper method which used an equal weights scalarization approach to combine the objective funtion linearly. The experiments executed by ```mo_sfs.py``` compares the predictive performance of MO-SFS against the the mono-objective sequential forward seletion for the Naive Bayes classifier (this can be modified on line 135). The experiments can also be run through an IDE or on the command line with the command ```python mo_sfs.py```.
+
 * Wrapper methods - scalability
 
-
+Finally, the scalability of wrapper methods is evaluated with the ```scalability.py``` script. Here the runtime as well as the peak memory usage are measured for the all wrapper methods considering the DecisionTree classifier (this can be modified on line 28) and the ```Synthetic_data.csv```. As in the previous, the experiments can also be run through an IDE or on the command line with the command ```python scalability.py```.

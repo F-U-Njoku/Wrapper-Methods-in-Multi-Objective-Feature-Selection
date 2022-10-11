@@ -28,8 +28,6 @@ knn = KNeighborsClassifier()
 baseTree = DecisionTreeClassifier(random_state=0)
 
 
-# Create various partitions for testing
-
 
 def tracing_start():
     tracemalloc.stop()
@@ -91,6 +89,19 @@ def experiment():
             result = scalability(method, X, y)
             result_time.append(result[0])
             result_mem.append(result[1])
+            
+            
+        # Seperate definitions for scikit-feature
+        tracing_start()
+        start = time.time()
+        skf_sfs = decision_tree_forward.decision_tree_forward(X.values, y.values, n_selected_features=subset_size)
+        end = time.time()
+        total_time = round((end - start), 4)
+        peak_mem = tracing_mem()
+        
+        result_time.append(total_time)
+        result_mem.append(peak_mem)
+        
         print("Time:", result_time)
         print("Memory:", result_mem)
         with open('scalability.txt', 'a') as f:
@@ -122,15 +133,28 @@ def experiment():
                                             scoring='accuracy',
                                             cv=2)
 
-        skf_sfs = decision_tree_forward.decision_tree_forward(X.values, y.values, n_selected_features=subset_size)
-
         multi_sfs = MultiObjSFS(baseTree, subset_size, 2, method="sum")
         methods = [mlx_sfs, skl_sfs, multi_sfs]
+        
+        
         for method in methods:
             result = scalability(method, X, y)
             result_time.append(result[0])
             result_mem.append(result[1])
-
+            
+        # Seperate definitions for scikit-feature
+        
+        tracing_start()
+        start = time.time()
+        skf_sfs = decision_tree_forward.decision_tree_forward(X.values, y.values, n_selected_features=subset_size)
+        end = time.time()
+        total_time = round((end - start), 4)
+        peak_mem = tracing_mem()
+        
+        result_time.append(total_time)
+        result_mem.append(peak_mem)
+            
+        
         print("Time:", result_time)
         print("Memory:", result_mem)
         with open('scalability.txt', 'a') as f:

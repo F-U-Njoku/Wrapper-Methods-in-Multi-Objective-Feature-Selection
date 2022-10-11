@@ -8,6 +8,26 @@ from sklearn.model_selection import cross_validate, cross_val_score
 
 
 class MultiObjSFS:
+    """
+    A class that implements the Muti-objective Sequential Forward Selection feature selection method
+
+    ...
+
+    Attributes
+    ----------
+    estimator : obj
+        an instance of a classification algorithm class
+    number_of_features : int
+        the number of features to be selected
+    cv : int
+        the number of folds for cross-validation
+
+    Method
+    -------
+    fit(self, X, y)
+        Selects a subset of features from a dataset
+    """
+
     def __init__(self, estimator, number_of_features, cv):
         self.estimator = estimator
         self.number_of_features = number_of_features
@@ -18,7 +38,6 @@ class MultiObjSFS:
                                 scoring=('accuracy', 'roc_auc'))
         acc = np.mean(scores['test_accuracy'])
         auc = np.mean(scores['test_roc_auc'])
-        # final_score = ((alpha * acc) + (1 - alpha) * auc)
         return acc + auc
 
     def fit(self, X, y):
